@@ -195,13 +195,15 @@ module.hot.accept(reloadCSS);
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.KEYS = exports.SPEED = exports.BOARD_GAP = exports.PADDLE_HEIGHT = exports.PADDLE_WIDTH = exports.SVG_NS = void 0;
+exports.KEYS = exports.RADIUS = exports.SPEED = exports.BOARD_GAP = exports.PADDLE_HEIGHT = exports.PADDLE_WIDTH = exports.SVG_NS = void 0;
 var SVG_NS = "http://www.w3.org/2000/svg";
 exports.SVG_NS = SVG_NS;
 var PADDLE_WIDTH = 8,
     PADDLE_HEIGHT = 56,
     BOARD_GAP = 10,
-    SPEED = 10;
+    SPEED = 10,
+    RADIUS = 8;
+exports.RADIUS = RADIUS;
 exports.SPEED = SPEED;
 exports.BOARD_GAP = BOARD_GAP;
 exports.PADDLE_HEIGHT = PADDLE_HEIGHT;
@@ -314,6 +316,55 @@ function () {
 }();
 
 exports.default = Paddle;
+},{"../settings":"src/settings.js"}],"src/partials/Ball.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _settings = require("../settings");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var Ball =
+/*#__PURE__*/
+function () {
+  function Ball(boardWidth, boardHeight, radius) {
+    _classCallCheck(this, Ball);
+
+    this.boardWidth = boardWidth;
+    this.boardHeight = boardHeight;
+    this.radius = radius;
+  }
+
+  _createClass(Ball, [{
+    key: "reset",
+    value: function reset() {
+      this.x = this.boardWidth / 2;
+      this.y = this.boardHeight / 2;
+    }
+  }, {
+    key: "render",
+    value: function render(svg) {
+      var circle = document.createElementNS(_settings.SVG_NS, 'circle');
+      circle.setAttributeNS(null, "fill", "white");
+      circle.setAttributeNS(null, "cx", this.boardWidth / 2);
+      circle.setAttributeNS(null, "cy", this.boardHeight / 2);
+      circle.setAttributeNS(null, "r", this.radius);
+      svg.appendChild(circle);
+    }
+  }]);
+
+  return Ball;
+}();
+
+exports.default = Ball;
 },{"../settings":"src/settings.js"}],"src/partials/Game.js":[function(require,module,exports) {
 "use strict";
 
@@ -327,6 +378,8 @@ var _settings = require("../settings");
 var _Board = _interopRequireDefault(require("./Board"));
 
 var _Paddles = _interopRequireDefault(require("./Paddles"));
+
+var _Ball = _interopRequireDefault(require("./Ball"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -350,7 +403,8 @@ function () {
     var boardMid = (this.height - _settings.PADDLE_HEIGHT) / 2;
     this.paddle1 = new _Paddles.default(this.height, _settings.PADDLE_WIDTH, _settings.PADDLE_HEIGHT, _settings.BOARD_GAP, boardMid, _settings.KEYS.p1up, _settings.KEYS.p1down);
     var paddle2Gap = this.width - _settings.BOARD_GAP - _settings.PADDLE_WIDTH;
-    this.paddle2 = new _Paddles.default(this.height, _settings.PADDLE_WIDTH, _settings.PADDLE_HEIGHT, paddle2Gap, boardMid, _settings.KEYS.p2up, _settings.KEYS.p2down); // Other code goes here...
+    this.paddle2 = new _Paddles.default(this.height, _settings.PADDLE_WIDTH, _settings.PADDLE_HEIGHT, paddle2Gap, boardMid, _settings.KEYS.p2up, _settings.KEYS.p2down);
+    this.ball = new _Ball.default(this.width, this.height, _settings.RADIUS); // Other code goes here...
   }
 
   _createClass(Game, [{
@@ -364,7 +418,8 @@ function () {
       this.gameElement.appendChild(svg);
       this.board.render(svg);
       this.paddle1.render(svg);
-      this.paddle2.render(svg); // More code goes here....
+      this.paddle2.render(svg);
+      this.ball.render(svg); // More code goes here....
     }
   }]);
 
@@ -372,7 +427,7 @@ function () {
 }();
 
 exports.default = Game;
-},{"../settings":"src/settings.js","./Board":"src/partials/Board.js","./Paddles":"src/partials/Paddles.js"}],"src/index.js":[function(require,module,exports) {
+},{"../settings":"src/settings.js","./Board":"src/partials/Board.js","./Paddles":"src/partials/Paddles.js","./Ball":"src/partials/Ball.js"}],"src/index.js":[function(require,module,exports) {
 "use strict";
 
 require("./styles/game.css");
