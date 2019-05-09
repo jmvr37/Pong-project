@@ -288,6 +288,8 @@ var Paddle =
 /*#__PURE__*/
 function () {
   function Paddle(boardHeight, paddleWidth, paddleHeight, initialX, initialY, keyUp, keyDown) {
+    var _this = this;
+
     _classCallCheck(this, Paddle);
 
     this.boardHeight = boardHeight;
@@ -297,9 +299,32 @@ function () {
     this.y = initialY;
     this.score = 0;
     this.speed = _settings.SPEED;
+    document.addEventListener("keydown", function (event) {
+      switch (event.key) {
+        case keyUp:
+          _this.moveUp();
+
+          break;
+
+        case keyDown:
+          _this.moveDown();
+
+          break;
+      }
+    });
   }
 
   _createClass(Paddle, [{
+    key: "moveUp",
+    value: function moveUp() {
+      this.y = Math.max(0, this.y - this.speed);
+    }
+  }, {
+    key: "moveDown",
+    value: function moveDown() {
+      this.y = Math.min(this.boardHeight - this.paddleHeight, this.y + this.speed);
+    }
+  }, {
     key: "render",
     value: function render(svg) {
       var rect = document.createElementNS(_settings.SVG_NS, 'rect');
