@@ -22,11 +22,27 @@ export default class Paddle {
         });
         
      }
+     increaseScore(){
+         this.score++;
+     }
+     getScore(){
+         return this.score;
+     }
      moveUp(){
          this.y = Math.max(0,this.y - this.speed);
      }
      moveDown(){
          this.y = Math.min(this.boardHeight - this.paddleHeight, this.y + this.speed);
+     }
+
+     getCoordinates(){
+         const walls = {
+             left: this.x,
+             top: this.y,
+             right: this.x + this.paddleWidth,
+             bottom: this.y + this.paddleHeight,
+         }
+         return walls;
      }
 
      render (svg) {
