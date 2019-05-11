@@ -11,6 +11,7 @@ export default class Game {
     this.width = width;
     this.height = height;
     this.paused = false;
+    this.newGame = false;
     this.gameElement = document.getElementById(this.element);
   
     this.board = new Board(this.width, this.height);
@@ -18,7 +19,12 @@ export default class Game {
     this.paddle1 = new Paddle(this.height, PADDLE_WIDTH, PADDLE_HEIGHT, BOARD_GAP, boardMid, KEYS.p1up, KEYS.p1down);
     const paddle2Gap = this.width - BOARD_GAP - PADDLE_WIDTH;
     this.paddle2 = new Paddle(this.height, PADDLE_WIDTH, PADDLE_HEIGHT, paddle2Gap, boardMid, KEYS.p2up, KEYS.p2down);
-    this.ball = new Ball(this.width, this.height, RADIUS);
+    this.ball = new Ball(this.width, this.height, 2, 'orange');
+    this.ball2 = new Ball(this.width, this.height, 4, 'orange');
+    // this.ball3 = new Ball(this.width, this.height, RADIUS, 'yellow');
+    // this.ball4 = new Ball(this.width, this.height, RADIUS, 'purple');
+    // this.ball5 = new Ball(this.width, this.height, RADIUS, 'pink');
+    // this.ball6 = new Ball(this.width, this.height, RADIUS);
     this.score1 = new Score (this.width/2 - 50, 30);
     this.score2 = new Score (this.width/2 + 25, 30);
     document.addEventListener("keydown", event => {
@@ -30,11 +36,31 @@ export default class Game {
 		// Other code goes here...
   }
 
-  render() {
-      if (this.paused){
-        return;
-      }
+  declareWinner(player1, player2){
+    if (player1 === 3){
+      alert('PLAYER 2 WINNER!!!');
+      this.paused = true;
+      this.newGame = true;
+      this.paddle1.resetScore();
+      this.paddle2.resetScore();
+      this.ball.reset();
+    } else if (player2 === 3){
+      alert('PLAYER 1 WINNER!!!');
+      this.paused = true;
+      this.newGame = true;
+      this.paddle1.resetScore();
+      this.paddle2.resetScore();
+      this.ball.reset();
+    }
+  }
 
+  render() {
+
+    this.declareWinner(this.paddle1.getScore(), this.paddle2.getScore());
+      // if (this.paused){
+      //   return false;
+      // }
+   
     if (this.paused === false){ 
     this.gameElement.innerHTML = '';
     let svg = document.createElementNS(SVG_NS, 'svg');
@@ -46,6 +72,12 @@ export default class Game {
     this.paddle1.render(svg);
     this.paddle2.render(svg);
     this.ball.render(svg, this.paddle1, this.paddle2);
+    if (this.newGame === true){
+    this.ball2.render(svg, this.paddle1, this.paddle2);}
+    // this.ball3.render(svg, this.paddle1, this.paddle2);
+    // this.ball4.render(svg, this.paddle1, this.paddle2);
+    // this.ball5.render(svg, this.paddle1, this.paddle2);
+    // this.ball6.render(svg, this.paddle1, this.paddle2);
     this.score1.render(svg, this.paddle1.getScore());
     this.score2.render(svg, this.paddle2.getScore());
 

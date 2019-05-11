@@ -201,7 +201,7 @@ exports.SVG_NS = SVG_NS;
 var PADDLE_WIDTH = 8,
     PADDLE_HEIGHT = 56,
     BOARD_GAP = 10,
-    SPEED = 10,
+    SPEED = 40,
     RADIUS = 8,
     TEXT_SIZE = 30;
 exports.TEXT_SIZE = TEXT_SIZE;
@@ -299,6 +299,7 @@ function () {
     this.paddleHeight = paddleHeight;
     this.x = initialX;
     this.y = initialY;
+    this.firstY = initialY;
     this.score = 0;
     this.speed = _settings.SPEED;
     document.addEventListener("keydown", function (event) {
@@ -325,6 +326,12 @@ function () {
     key: "getScore",
     value: function getScore() {
       return this.score;
+    }
+  }, {
+    key: "resetScore",
+    value: function resetScore() {
+      this.score = 0;
+      this.y = this.firstY;
     }
   }, {
     key: "moveUp",
@@ -364,7 +371,11 @@ function () {
 }();
 
 exports.default = Paddle;
-},{"../settings":"src/settings.js"}],"src/partials/Ball.js":[function(require,module,exports) {
+},{"../settings":"src/settings.js"}],"public/sounds/pong-02.wav":[function(require,module,exports) {
+module.exports = "/pong-02.da6e8897.wav";
+},{}],"public/sounds/pong-03.wav":[function(require,module,exports) {
+module.exports = "/pong-03.494ec16d.wav";
+},{}],"src/partials/Ball.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -373,6 +384,12 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = void 0;
 
 var _settings = require("../settings");
+
+var _pong = _interopRequireDefault(require("../../public/sounds/pong-02.wav"));
+
+var _pong2 = _interopRequireDefault(require("../../public/sounds/pong-03.wav"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -383,14 +400,17 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 var Ball =
 /*#__PURE__*/
 function () {
-  function Ball(boardWidth, boardHeight, radius) {
+  function Ball(boardWidth, boardHeight, radius, color, size) {
     _classCallCheck(this, Ball);
 
+    this.color = color;
+    this.size = size;
     this.boardWidth = boardWidth;
     this.boardHeight = boardHeight;
     this.radius = radius;
     this.direction = 2;
-    this.ping = new Audio("");
+    this.ping = new Audio(_pong.default);
+    this.pang = new Audio(_pong2.default);
     this.reset();
   }
 
@@ -424,10 +444,12 @@ function () {
       if (this.x <= 0) {
         player2.increaseScore();
         this.direction = this.direction * -1;
+        this.pang.play();
         this.reset();
       } else if (this.x >= this.boardWidth) {
         player1.increaseScore();
         this.direction = this.direction * -1;
+        this.pang.play();
         this.reset();
       }
     }
@@ -437,7 +459,7 @@ function () {
       if (this.vx > 0) {
         var p2 = player2.getCoordinates(); //check for hit with player2
 
-        if (this.x + this.radius >= p2.left && this.y + this.radius >= p2.top && this.y - this.radius <= p2.bottom) {
+        if (this.x + this.radius >= p2.left && this.x + this.radius <= p2.right && this.y >= p2.top && this.y <= p2.bottom) {
           this.vx = this.vx * -1;
           this.ping.play();
         }
@@ -445,8 +467,9 @@ function () {
         //check for hit with player1
         var p1 = player1.getCoordinates(); //check for hit with player2
 
-        if (this.x - this.radius <= p1.right && this.y + this.radius >= p1.top && this.y - this.radius <= p1.bottom) {
+        if (this.x - this.radius <= p1.right && this.x - this.radius >= p1.left && this.y >= p1.top && this.y <= p1.bottom) {
           this.vx = this.vx * -1;
+          this.ping.play();
         }
       }
     }
@@ -454,7 +477,7 @@ function () {
     key: "render",
     value: function render(svg, player1, player2) {
       var circle = document.createElementNS(_settings.SVG_NS, 'circle');
-      circle.setAttributeNS(null, "fill", "white");
+      circle.setAttributeNS(null, "fill", this.color);
       circle.setAttributeNS(null, "cx", this.x);
       circle.setAttributeNS(null, "cy", this.y);
       circle.setAttributeNS(null, "r", this.radius);
@@ -471,7 +494,7 @@ function () {
 }();
 
 exports.default = Ball;
-},{"../settings":"src/settings.js"}],"src/partials/Score.js":[function(require,module,exports) {
+},{"../settings":"src/settings.js","../../public/sounds/pong-02.wav":"public/sounds/pong-02.wav","../../public/sounds/pong-03.wav":"public/sounds/pong-03.wav"}],"src/partials/Score.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -553,13 +576,19 @@ function () {
     this.width = width;
     this.height = height;
     this.paused = false;
+    this.newGame = false;
     this.gameElement = document.getElementById(this.element);
     this.board = new _Board.default(this.width, this.height);
     var boardMid = (this.height - _settings.PADDLE_HEIGHT) / 2;
     this.paddle1 = new _Paddles.default(this.height, _settings.PADDLE_WIDTH, _settings.PADDLE_HEIGHT, _settings.BOARD_GAP, boardMid, _settings.KEYS.p1up, _settings.KEYS.p1down);
     var paddle2Gap = this.width - _settings.BOARD_GAP - _settings.PADDLE_WIDTH;
     this.paddle2 = new _Paddles.default(this.height, _settings.PADDLE_WIDTH, _settings.PADDLE_HEIGHT, paddle2Gap, boardMid, _settings.KEYS.p2up, _settings.KEYS.p2down);
-    this.ball = new _Ball.default(this.width, this.height, _settings.RADIUS);
+    this.ball = new _Ball.default(this.width, this.height, 2, 'orange');
+    this.ball2 = new _Ball.default(this.width, this.height, 4, 'orange'); // this.ball3 = new Ball(this.width, this.height, RADIUS, 'yellow');
+    // this.ball4 = new Ball(this.width, this.height, RADIUS, 'purple');
+    // this.ball5 = new Ball(this.width, this.height, RADIUS, 'pink');
+    // this.ball6 = new Ball(this.width, this.height, RADIUS);
+
     this.score1 = new _Score.default(this.width / 2 - 50, 30);
     this.score2 = new _Score.default(this.width / 2 + 25, 30);
     document.addEventListener("keydown", function (event) {
@@ -570,11 +599,30 @@ function () {
   }
 
   _createClass(Game, [{
+    key: "declareWinner",
+    value: function declareWinner(player1, player2) {
+      if (player1 === 3) {
+        alert('PLAYER 2 WINNER!!!');
+        this.paused = true;
+        this.newGame = true;
+        this.paddle1.resetScore();
+        this.paddle2.resetScore();
+        this.ball.reset();
+      } else if (player2 === 3) {
+        alert('PLAYER 1 WINNER!!!');
+        this.paused = true;
+        this.newGame = true;
+        this.paddle1.resetScore();
+        this.paddle2.resetScore();
+        this.ball.reset();
+      }
+    }
+  }, {
     key: "render",
     value: function render() {
-      if (this.paused) {
-        return;
-      }
+      this.declareWinner(this.paddle1.getScore(), this.paddle2.getScore()); // if (this.paused){
+      //   return false;
+      // }
 
       if (this.paused === false) {
         this.gameElement.innerHTML = '';
@@ -587,6 +635,15 @@ function () {
         this.paddle1.render(svg);
         this.paddle2.render(svg);
         this.ball.render(svg, this.paddle1, this.paddle2);
+
+        if (this.newGame === true) {
+          this.ball2.render(svg, this.paddle1, this.paddle2);
+        } // this.ball3.render(svg, this.paddle1, this.paddle2);
+        // this.ball4.render(svg, this.paddle1, this.paddle2);
+        // this.ball5.render(svg, this.paddle1, this.paddle2);
+        // this.ball6.render(svg, this.paddle1, this.paddle2);
+
+
         this.score1.render(svg, this.paddle1.getScore());
         this.score2.render(svg, this.paddle2.getScore()); // More code goes here....
       }
@@ -641,7 +698,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63240" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53352" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
