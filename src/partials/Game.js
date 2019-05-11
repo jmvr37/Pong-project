@@ -19,8 +19,8 @@ export default class Game {
     this.paddle1 = new Paddle(this.height, PADDLE_WIDTH, PADDLE_HEIGHT, BOARD_GAP, boardMid, KEYS.p1up, KEYS.p1down);
     const paddle2Gap = this.width - BOARD_GAP - PADDLE_WIDTH;
     this.paddle2 = new Paddle(this.height, PADDLE_WIDTH, PADDLE_HEIGHT, paddle2Gap, boardMid, KEYS.p2up, KEYS.p2down);
-    this.ball = new Ball(this.width, this.height, 2, 'orange');
-    this.ball2 = new Ball(this.width, this.height, 4, 'orange');
+    this.ball = new Ball(this.width, this.height, 7, 'orange');
+    this.ball2 = new Ball(this.width, this.height, 20, 'orange');
     // this.ball3 = new Ball(this.width, this.height, RADIUS, 'yellow');
     // this.ball4 = new Ball(this.width, this.height, RADIUS, 'purple');
     // this.ball5 = new Ball(this.width, this.height, RADIUS, 'pink');
@@ -37,14 +37,14 @@ export default class Game {
   }
 
   declareWinner(player1, player2){
-    if (player1 === 3){
+    if (player1 === 5){
       alert('PLAYER 2 WINNER!!!');
       this.paused = true;
       this.newGame = true;
       this.paddle1.resetScore();
       this.paddle2.resetScore();
       this.ball.reset();
-    } else if (player2 === 3){
+    } else if (player2 === 5){
       alert('PLAYER 1 WINNER!!!');
       this.paused = true;
       this.newGame = true;
@@ -53,25 +53,35 @@ export default class Game {
       this.ball.reset();
     }
   }
+  setPaddleHeight(player1, player2){
+    if( player1 === 3){
+      this.paddle1.setPaddleHeight(40);
+
+    } if (player2 === 3){
+      this.paddle2.setPaddleHeight(40);
+    }
+  }
 
   render() {
 
     this.declareWinner(this.paddle1.getScore(), this.paddle2.getScore());
+    
       // if (this.paused){
       //   return false;
       // }
    
     if (this.paused === false){ 
-    this.gameElement.innerHTML = '';
-    let svg = document.createElementNS(SVG_NS, 'svg');
-    svg.setAttributeNS(null, "width", this.width);
-    svg.setAttributeNS(null, "height", this.height);
-    svg.setAttributeNS(null, "viewBox", `0 0 ${this.width} ${this.height}`);
-    this.gameElement.appendChild(svg);
-    this.board.render(svg);
-    this.paddle1.render(svg);
-    this.paddle2.render(svg);
-    this.ball.render(svg, this.paddle1, this.paddle2);
+      this.gameElement.innerHTML = '';
+      let svg = document.createElementNS(SVG_NS, 'svg');
+      svg.setAttributeNS(null, "width", this.width);
+      svg.setAttributeNS(null, "height", this.height);
+      svg.setAttributeNS(null, "viewBox", `0 0 ${this.width} ${this.height}`);
+      this.gameElement.appendChild(svg);
+      this.board.render(svg);
+      this.paddle1.render(svg);
+      this.paddle2.render(svg);
+      this.setPaddleHeight(this.paddle1.getScore(), this.paddle2.getScore());
+     this.ball.render(svg, this.paddle1, this.paddle2);
     if (this.newGame === true){
     this.ball2.render(svg, this.paddle1, this.paddle2);}
     // this.ball3.render(svg, this.paddle1, this.paddle2);

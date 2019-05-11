@@ -33,6 +33,9 @@ export default class Paddle {
          this.score = 0;
          this.y = this.firstY;
      }
+     setPaddleHeight(height){
+        this.paddleHeight = height;
+     }
      moveUp(){
          this.y = Math.max(0,this.y - this.speed);
      }

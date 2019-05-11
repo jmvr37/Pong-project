@@ -334,6 +334,11 @@ function () {
       this.y = this.firstY;
     }
   }, {
+    key: "setPaddleHeight",
+    value: function setPaddleHeight(height) {
+      this.paddleHeight = height;
+    }
+  }, {
     key: "moveUp",
     value: function moveUp() {
       this.y = Math.max(0, this.y - this.speed);
@@ -583,8 +588,8 @@ function () {
     this.paddle1 = new _Paddles.default(this.height, _settings.PADDLE_WIDTH, _settings.PADDLE_HEIGHT, _settings.BOARD_GAP, boardMid, _settings.KEYS.p1up, _settings.KEYS.p1down);
     var paddle2Gap = this.width - _settings.BOARD_GAP - _settings.PADDLE_WIDTH;
     this.paddle2 = new _Paddles.default(this.height, _settings.PADDLE_WIDTH, _settings.PADDLE_HEIGHT, paddle2Gap, boardMid, _settings.KEYS.p2up, _settings.KEYS.p2down);
-    this.ball = new _Ball.default(this.width, this.height, 2, 'orange');
-    this.ball2 = new _Ball.default(this.width, this.height, 4, 'orange'); // this.ball3 = new Ball(this.width, this.height, RADIUS, 'yellow');
+    this.ball = new _Ball.default(this.width, this.height, 7, 'orange');
+    this.ball2 = new _Ball.default(this.width, this.height, 20, 'orange'); // this.ball3 = new Ball(this.width, this.height, RADIUS, 'yellow');
     // this.ball4 = new Ball(this.width, this.height, RADIUS, 'purple');
     // this.ball5 = new Ball(this.width, this.height, RADIUS, 'pink');
     // this.ball6 = new Ball(this.width, this.height, RADIUS);
@@ -601,20 +606,31 @@ function () {
   _createClass(Game, [{
     key: "declareWinner",
     value: function declareWinner(player1, player2) {
-      if (player1 === 3) {
+      if (player1 === 5) {
         alert('PLAYER 2 WINNER!!!');
         this.paused = true;
         this.newGame = true;
         this.paddle1.resetScore();
         this.paddle2.resetScore();
         this.ball.reset();
-      } else if (player2 === 3) {
+      } else if (player2 === 5) {
         alert('PLAYER 1 WINNER!!!');
         this.paused = true;
         this.newGame = true;
         this.paddle1.resetScore();
         this.paddle2.resetScore();
         this.ball.reset();
+      }
+    }
+  }, {
+    key: "setPaddleHeight",
+    value: function setPaddleHeight(player1, player2) {
+      if (player1 === 3) {
+        this.paddle1.setPaddleHeight(40);
+      }
+
+      if (player2 === 3) {
+        this.paddle2.setPaddleHeight(40);
       }
     }
   }, {
@@ -634,6 +650,7 @@ function () {
         this.board.render(svg);
         this.paddle1.render(svg);
         this.paddle2.render(svg);
+        this.setPaddleHeight(this.paddle1.getScore(), this.paddle2.getScore());
         this.ball.render(svg, this.paddle1, this.paddle2);
 
         if (this.newGame === true) {
