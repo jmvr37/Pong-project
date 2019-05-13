@@ -623,8 +623,8 @@ function () {
       }
     }
   }, {
-    key: "setPaddleHeight",
-    value: function setPaddleHeight(player1, player2) {
+    key: "checkPaddleHeight",
+    value: function checkPaddleHeight(player1, player2) {
       if (player1 === 3) {
         this.paddle1.setPaddleHeight(40);
       }
@@ -650,7 +650,7 @@ function () {
         this.board.render(svg);
         this.paddle1.render(svg);
         this.paddle2.render(svg);
-        this.setPaddleHeight(this.paddle1.getScore(), this.paddle2.getScore());
+        this.checkPaddleHeight(this.paddle1.getScore(), this.paddle2.getScore());
         this.ball.render(svg, this.paddle1, this.paddle2);
 
         if (this.newGame === true) {
