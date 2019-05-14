@@ -8,6 +8,7 @@ import Score from './Score';
 export default class Game {
   constructor(element, width, height) {
     this.element = element;
+    this.numGame = 1;
     this.width = width;
     this.height = height;
     this.paused = false;
@@ -37,20 +38,35 @@ export default class Game {
   }
 
   declareWinner(player1, player2){
-    if (player1 === 5){
+    if (player1 === 1){
       this.gameElement.innerHTML ='PLAYER 2 WINS!!!';
       this.paused = true;
       this.newGame = true;
+      this.numGame += this.numGame;
+      const h2 = document.querySelector('h2');
+      const p = document.querySelectorAll('p');
+      h2.setAttribute('style', 'display: none');
+      p[0].setAttribute('style', 'display: none');      
+      p[1].setAttribute('style', 'display: none');      
+      p[2].setAttribute('style', 'display: none');       
       this.paddle1.resetScore();
       this.paddle2.resetScore();
       this.ball.reset();
-    } else if (player2 === 5){
+         
+    } else if (player2 === 1){
       this.gameElement.innerHTML = 'PLAYER 1 WINS!!!';
       this.paused = true;
       this.newGame = true;
+      this.numGame += this.numGame;
       this.paddle1.resetScore();
       this.paddle2.resetScore();
       this.ball.reset();
+      const h2 = document.querySelector('h2');
+      const p = document.querySelectorAll('p');
+      h2.setAttribute('style', 'display: none');
+      p[0].setAttribute('style', 'display: none');      
+      p[1].setAttribute('style', 'display: none');      
+      p[2].setAttribute('style', 'display: none');  
     }
   }
   checkPaddleHeight(player1, player2){
@@ -62,25 +78,10 @@ export default class Game {
     }
   }
 
-  gameOver (player1, player2){
-    if (player1 === 5){
-      this.gameElement.innerHTML = 'Game Over ☠️';
-      this.paused = true;
-      this.paddle1.resetScore();
-      this.paddle2.resetScore();
-    } else if (player2 === 5){
-      this.gameElement.innerHTML = 'Game Over ☠️';
-      this.paused = true;
-      this.paddle1.resetScore();
-      this.paddle2.resetScore();
-    }
-  }
 
   render() {
 
     this.declareWinner(this.paddle1.getScore(), this.paddle2.getScore());
-    this.gameOver(this.paddle1.getScore(), this.paddle2.getScore());
-    
       // if (this.paused){
       //   return false;
       // }
@@ -98,13 +99,32 @@ export default class Game {
       this.checkPaddleHeight(this.paddle1.getScore(), this.paddle2.getScore());
      this.ball.render(svg, this.paddle1, this.paddle2);
     if (this.newGame === true){
-    this.ball2.render(svg, this.paddle1, this.paddle2);}
+    this.ball2.render(svg, this.paddle1, this.paddle2);
+    const h2 = document.querySelector('h2');
+    const p = document.querySelectorAll('p');
+    h2.setAttribute('style', 'display: block');
+    p[0].setAttribute('style', 'display: block');      
+    p[1].setAttribute('style', 'display: block');      
+    p[2].setAttribute('style', 'display: block');  
+  }
+
+    if (this.numGame > 4){      
+      this.gameElement.innerHTML = 'Game Over ☠️';
+      const h2 = document.querySelector('h2');
+      const p = document.querySelectorAll('p');
+      h2.setAttribute('style', 'display: none');
+      p[0].setAttribute('style', 'display: none');      
+      p[1].setAttribute('style', 'display: none');      
+      p[2].setAttribute('style', 'display: none');  
+    }
+
     // this.ball3.render(svg, this.paddle1, this.paddle2);
     // this.ball4.render(svg, this.paddle1, this.paddle2);
     // this.ball5.render(svg, this.paddle1, this.paddle2);
     // this.ball6.render(svg, this.paddle1, this.paddle2);
     this.score1.render(svg, this.paddle1.getScore());
     this.score2.render(svg, this.paddle2.getScore());
+    
 
     // More code goes here....
   }

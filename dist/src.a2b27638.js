@@ -578,6 +578,7 @@ function () {
     _classCallCheck(this, Game);
 
     this.element = element;
+    this.numGame = 1;
     this.width = width;
     this.height = height;
     this.paused = false;
@@ -606,20 +607,40 @@ function () {
   _createClass(Game, [{
     key: "declareWinner",
     value: function declareWinner(player1, player2) {
-      if (player1 === 5) {
+      if (player1 === 1) {
         this.gameElement.innerHTML = 'PLAYER 2 WINS!!!';
         this.paused = true;
         this.newGame = true;
+        this.numGame += this.numGame;
+        var h2 = document.querySelector('h2');
+        var p = document.querySelectorAll('p');
+        h2.setAttribute('style', 'display: none');
+        p[0].setAttribute('style', 'display: none');
+        p[1].setAttribute('style', 'display: none');
+        p[2].setAttribute('style', 'display: none');
         this.paddle1.resetScore();
         this.paddle2.resetScore();
         this.ball.reset();
-      } else if (player2 === 5) {
+      } else if (player2 === 1) {
         this.gameElement.innerHTML = 'PLAYER 1 WINS!!!';
         this.paused = true;
         this.newGame = true;
+        this.numGame += this.numGame;
         this.paddle1.resetScore();
         this.paddle2.resetScore();
         this.ball.reset();
+
+        var _h = document.querySelector('h2');
+
+        var _p = document.querySelectorAll('p');
+
+        _h.setAttribute('style', 'display: none');
+
+        _p[0].setAttribute('style', 'display: none');
+
+        _p[1].setAttribute('style', 'display: none');
+
+        _p[2].setAttribute('style', 'display: none');
       }
     }
   }, {
@@ -634,25 +655,9 @@ function () {
       }
     }
   }, {
-    key: "gameOver",
-    value: function gameOver(player1, player2) {
-      if (player1 === 5) {
-        this.gameElement.innerHTML = 'Game Over ☠️';
-        this.paused = true;
-        this.paddle1.resetScore();
-        this.paddle2.resetScore();
-      } else if (player2 === 5) {
-        this.gameElement.innerHTML = 'Game Over ☠️';
-        this.paused = true;
-        this.paddle1.resetScore();
-        this.paddle2.resetScore();
-      }
-    }
-  }, {
     key: "render",
     value: function render() {
-      this.declareWinner(this.paddle1.getScore(), this.paddle2.getScore());
-      this.gameOver(this.paddle1.getScore(), this.paddle2.getScore()); // if (this.paused){
+      this.declareWinner(this.paddle1.getScore(), this.paddle2.getScore()); // if (this.paused){
       //   return false;
       // }
 
@@ -671,6 +676,28 @@ function () {
 
         if (this.newGame === true) {
           this.ball2.render(svg, this.paddle1, this.paddle2);
+          var h2 = document.querySelector('h2');
+          var p = document.querySelectorAll('p');
+          h2.setAttribute('style', 'display: block');
+          p[0].setAttribute('style', 'display: block');
+          p[1].setAttribute('style', 'display: block');
+          p[2].setAttribute('style', 'display: block');
+        }
+
+        if (this.numGame > 4) {
+          this.gameElement.innerHTML = 'Game Over ☠️';
+
+          var _h2 = document.querySelector('h2');
+
+          var _p2 = document.querySelectorAll('p');
+
+          _h2.setAttribute('style', 'display: none');
+
+          _p2[0].setAttribute('style', 'display: none');
+
+          _p2[1].setAttribute('style', 'display: none');
+
+          _p2[2].setAttribute('style', 'display: none');
         } // this.ball3.render(svg, this.paddle1, this.paddle2);
         // this.ball4.render(svg, this.paddle1, this.paddle2);
         // this.ball5.render(svg, this.paddle1, this.paddle2);
