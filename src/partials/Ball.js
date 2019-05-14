@@ -9,7 +9,7 @@ export default class Ball {
         this.boardWidth = boardWidth;
         this.boardHeight = boardHeight;
         this.radius = radius;
-        this.direction = 2;
+        this.direction = 0.5;
         this.ping = new Audio(audioFile);
         this.pang = new Audio(audioFile2);
         this.reset();

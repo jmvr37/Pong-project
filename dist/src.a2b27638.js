@@ -201,7 +201,7 @@ exports.SVG_NS = SVG_NS;
 var PADDLE_WIDTH = 8,
     PADDLE_HEIGHT = 56,
     BOARD_GAP = 10,
-    SPEED = 40,
+    SPEED = 30,
     RADIUS = 8,
     TEXT_SIZE = 30;
 exports.TEXT_SIZE = TEXT_SIZE;
@@ -365,7 +365,7 @@ function () {
       var rect = document.createElementNS(_settings.SVG_NS, 'rect');
       rect.setAttributeNS(null, "width", this.paddleWidth);
       rect.setAttributeNS(null, "height", this.paddleHeight);
-      rect.setAttributeNS(null, "fill", "white");
+      rect.setAttributeNS(null, "fill", "orange");
       rect.setAttributeNS(null, "x", this.x);
       rect.setAttributeNS(null, "y", this.y);
       svg.appendChild(rect);
@@ -413,7 +413,7 @@ function () {
     this.boardWidth = boardWidth;
     this.boardHeight = boardHeight;
     this.radius = radius;
-    this.direction = 2;
+    this.direction = 0.5;
     this.ping = new Audio(_pong.default);
     this.pang = new Audio(_pong2.default);
     this.reset();
@@ -589,7 +589,7 @@ function () {
     var paddle2Gap = this.width - _settings.BOARD_GAP - _settings.PADDLE_WIDTH;
     this.paddle2 = new _Paddles.default(this.height, _settings.PADDLE_WIDTH, _settings.PADDLE_HEIGHT, paddle2Gap, boardMid, _settings.KEYS.p2up, _settings.KEYS.p2down);
     this.ball = new _Ball.default(this.width, this.height, 7, 'orange');
-    this.ball2 = new _Ball.default(this.width, this.height, 20, 'orange'); // this.ball3 = new Ball(this.width, this.height, RADIUS, 'yellow');
+    this.ball2 = new _Ball.default(this.width, this.height, 10, 'orange'); // this.ball3 = new Ball(this.width, this.height, RADIUS, 'yellow');
     // this.ball4 = new Ball(this.width, this.height, RADIUS, 'purple');
     // this.ball5 = new Ball(this.width, this.height, RADIUS, 'pink');
     // this.ball6 = new Ball(this.width, this.height, RADIUS);
@@ -607,14 +607,14 @@ function () {
     key: "declareWinner",
     value: function declareWinner(player1, player2) {
       if (player1 === 5) {
-        this.gameElement.innerHTML = 'PLAYER 2 WINNER!!!';
+        this.gameElement.innerHTML = 'PLAYER 2 WINS!!!';
         this.paused = true;
         this.newGame = true;
         this.paddle1.resetScore();
         this.paddle2.resetScore();
         this.ball.reset();
       } else if (player2 === 5) {
-        this.gameElement.innerHTML = 'PLAYER 1 WINNER!!!';
+        this.gameElement.innerHTML = 'PLAYER 1 WINS!!!';
         this.paused = true;
         this.newGame = true;
         this.paddle1.resetScore();
@@ -625,18 +625,34 @@ function () {
   }, {
     key: "checkPaddleHeight",
     value: function checkPaddleHeight(player1, player2) {
-      if (player1 === 3) {
+      if (player1 === 5) {
         this.paddle1.setPaddleHeight(40);
       }
 
-      if (player2 === 3) {
+      if (player2 === 5) {
         this.paddle2.setPaddleHeight(40);
+      }
+    }
+  }, {
+    key: "gameOver",
+    value: function gameOver(player1, player2) {
+      if (player1 === 5) {
+        this.gameElement.innerHTML = 'Game Over ☠️';
+        this.paused = true;
+        this.paddle1.resetScore();
+        this.paddle2.resetScore();
+      } else if (player2 === 5) {
+        this.gameElement.innerHTML = 'Game Over ☠️';
+        this.paused = true;
+        this.paddle1.resetScore();
+        this.paddle2.resetScore();
       }
     }
   }, {
     key: "render",
     value: function render() {
-      this.declareWinner(this.paddle1.getScore(), this.paddle2.getScore()); // if (this.paused){
+      this.declareWinner(this.paddle1.getScore(), this.paddle2.getScore());
+      this.gameOver(this.paddle1.getScore(), this.paddle2.getScore()); // if (this.paused){
       //   return false;
       // }
 

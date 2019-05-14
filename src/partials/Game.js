@@ -20,7 +20,7 @@ export default class Game {
     const paddle2Gap = this.width - BOARD_GAP - PADDLE_WIDTH;
     this.paddle2 = new Paddle(this.height, PADDLE_WIDTH, PADDLE_HEIGHT, paddle2Gap, boardMid, KEYS.p2up, KEYS.p2down);
     this.ball = new Ball(this.width, this.height, 7, 'orange');
-    this.ball2 = new Ball(this.width, this.height, 20, 'orange');
+    this.ball2 = new Ball(this.width, this.height, 10, 'orange');
     // this.ball3 = new Ball(this.width, this.height, RADIUS, 'yellow');
     // this.ball4 = new Ball(this.width, this.height, RADIUS, 'purple');
     // this.ball5 = new Ball(this.width, this.height, RADIUS, 'pink');
@@ -38,14 +38,14 @@ export default class Game {
 
   declareWinner(player1, player2){
     if (player1 === 5){
-      this.gameElement.innerHTML ='PLAYER 2 WINNER!!!';
+      this.gameElement.innerHTML ='PLAYER 2 WINS!!!';
       this.paused = true;
       this.newGame = true;
       this.paddle1.resetScore();
       this.paddle2.resetScore();
       this.ball.reset();
     } else if (player2 === 5){
-      this.gameElement.innerHTML = 'PLAYER 1 WINNER!!!';
+      this.gameElement.innerHTML = 'PLAYER 1 WINS!!!';
       this.paused = true;
       this.newGame = true;
       this.paddle1.resetScore();
@@ -54,17 +54,32 @@ export default class Game {
     }
   }
   checkPaddleHeight(player1, player2){
-    if( player1 === 3){
+    if( player1 === 5){
       this.paddle1.setPaddleHeight(40);
 
-    } if (player2 === 3){
+    } if (player2 === 5){
       this.paddle2.setPaddleHeight(40);
+    }
+  }
+
+  gameOver (player1, player2){
+    if (player1 === 5){
+      this.gameElement.innerHTML = 'Game Over ☠️';
+      this.paused = true;
+      this.paddle1.resetScore();
+      this.paddle2.resetScore();
+    } else if (player2 === 5){
+      this.gameElement.innerHTML = 'Game Over ☠️';
+      this.paused = true;
+      this.paddle1.resetScore();
+      this.paddle2.resetScore();
     }
   }
 
   render() {
 
     this.declareWinner(this.paddle1.getScore(), this.paddle2.getScore());
+    this.gameOver(this.paddle1.getScore(), this.paddle2.getScore());
     
       // if (this.paused){
       //   return false;
