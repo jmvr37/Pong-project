@@ -1,7 +1,7 @@
 # Pong Game
 ### pong game is a replica of the pong game from RED Academy, is the second project of the course. we built the classic pong game using HTML and Js. it was challenging due the Js classes & constructors we used.
 
-#Tech & Languages Used
+# Tech & Languages Used
 
 * HTML
 * Javascript
