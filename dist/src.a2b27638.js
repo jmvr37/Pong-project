@@ -607,7 +607,7 @@ function () {
   _createClass(Game, [{
     key: "declareWinner",
     value: function declareWinner(player1, player2) {
-      if (player1 === 1) {
+      if (player1 === 3) {
         this.gameElement.innerHTML = 'PLAYER 2 WINS!!!';
         this.paused = true;
         this.newGame = true;
@@ -621,7 +621,7 @@ function () {
         this.paddle1.resetScore();
         this.paddle2.resetScore();
         this.ball.reset();
-      } else if (player2 === 1) {
+      } else if (player2 === 3) {
         this.gameElement.innerHTML = 'PLAYER 1 WINS!!!';
         this.paused = true;
         this.newGame = true;
