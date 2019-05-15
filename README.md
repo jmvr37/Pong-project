@@ -8,7 +8,7 @@
 
 # Skills Learned
 
-### The pong game was built using differents technologies like HTML and Js, we started using Js constructor classes to built it. i learned more how to use functions and classes to build games. i also learned about svg images and how control them.
+### The pong game was built using differents technologies like HTML and Js, we started using Js constructor classes to built it. I learned more how to use functions and classes to build games. I also learned about svg images and how control them.
 
 # Browser Support
 
