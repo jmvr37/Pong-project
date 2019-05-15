@@ -49,6 +49,7 @@ export default class Game {
       p[0].setAttribute('style', 'display: none');      
       p[1].setAttribute('style', 'display: none');      
       p[2].setAttribute('style', 'display: none');       
+      p[3].setAttribute('style', 'display: none'); 
       this.paddle1.resetScore();
       this.paddle2.resetScore();
       this.ball.reset();
@@ -66,7 +67,8 @@ export default class Game {
       h2.setAttribute('style', 'display: none');
       p[0].setAttribute('style', 'display: none');      
       p[1].setAttribute('style', 'display: none');      
-      p[2].setAttribute('style', 'display: none');  
+      p[2].setAttribute('style', 'display: none'); 
+      p[3].setAttribute('style', 'display: none');  
     }
   }
   checkPaddleHeight(player1, player2){
@@ -106,6 +108,7 @@ export default class Game {
     p[0].setAttribute('style', 'display: block');      
     p[1].setAttribute('style', 'display: block');      
     p[2].setAttribute('style', 'display: block');  
+    p[3].setAttribute('style', 'display: block'); 
   }
 
     if (this.numGame > 4){      
@@ -116,6 +119,7 @@ export default class Game {
       p[0].setAttribute('style', 'display: none');      
       p[1].setAttribute('style', 'display: none');      
       p[2].setAttribute('style', 'display: none');  
+      p[3].setAttribute('style', 'display: none'); 
     }
 
     // this.ball3.render(svg, this.paddle1, this.paddle2);
